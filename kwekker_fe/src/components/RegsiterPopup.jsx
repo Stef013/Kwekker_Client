@@ -40,12 +40,17 @@ const useStyles = makeStyles((theme) => ({
 export default function RegisterPopup() {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
-    const [Repassword, setRePassword] = React.useState('');
+    const [confPassword, setConfPassword] = React.useState('');
+    const [showError, setShowError] = React.useState(false);
+    const [helperText, setHelperText] = React.useState();
     const [account, setAccount] = React.useState({
+        ID: 0,
         email: " ",
         password: " ",
     });
     const [profile, setProfile] = React.useState({
+        ID: 0,
+        accountID: 0,
         profileName: " ",
         userTag: " ",
     });
@@ -59,35 +64,98 @@ export default function RegisterPopup() {
         setOpen(false);
     };
 
-    function handleSubmit(event) {
+    function checkPasswords() {
+        if (account.password == confPassword) {
+            console.log(account.password)
+            console.log(confPassword)
+            return true;
+        }
+        else {
+            setShowError(true);
+            setHelperText("Passwords don't match!")
+            console.log(account.password)
+            console.log(confPassword)
+            return false;
+        }
+    }
+
+    async function checkEmail() {
+        var emailExists = true;
+
+        console.log("checkemail");
+
+        await axios.get('https://localhost:44344/account/email', { params: { email: account.email } })
+            .then(res => {
+                console.log(res);
+                console.log("emailcheck: " + res.data);
+                emailExists = res.data;
+            })
+            .catch(error => {
+                console.log(error)
+            });
+
+        return emailExists;
+    }
+
+    async function checkUserTag() {
+        var tagExists = true;
+
+        console.log("checktag");
+
+        await axios.get('https://localhost:44344/profile/userTag', { params: { usertag: profile.userTag } })
+            .then(res => {
+                console.log(res);
+                console.log("tagcheck: " + res.data);
+                tagExists = res.data;
+            })
+            .catch(error => {
+                console.log(error)
+            });
+
+        return tagExists;
+    }
+
+    async function handleSubmit(event) {
         event.preventDefault();
 
-        setProfile({
-            profileName: event.target.profileName.value,
-            userTag: event.target.userTag.value,
-        })
+        if (checkPasswords()) {
 
-        setAccount({
-            email: event.target.email.value,
-            password: event.target.password.value,
-        })
+            var emailExists = await checkEmail();
+            var tagExists = await checkUserTag();;
 
-        console.log(profile);
-        console.log(profile.profileName);
-        console.log(account);
+            if (!emailExists && !tagExists) {
 
-        // const user = account;
-        // account.nationality = country;
+                var result = false;
 
-        // const user = account;
-        // console.log(user);
-        // console.log(country);
+                await axios.post('https://localhost:44344/account', account, {
+                    headers: {
+                        "Content-Type": 'application/json', 'Accept': 'application/json'
+                    }
+                }).then(res => {
+                    console.log(res);
+                    console.log(res.data);
 
-        // axios.post('http://localhost:5678/account/register', { user }).then(res => {
-        //     console.log(res);
-        //     console.log(res.data);
-        // })
+                    result = res.data.success;
+                    profile.accountID = res.data.accountID;
+                }).catch(error => console.log(error));
 
+                if (result) {
+
+                    await axios.post('https://localhost:44344/profile/', profile, {
+                        headers: {
+                            "Content-Type": 'application/json', 'Accept': 'application/json'
+                        }
+                    }).then(res => {
+                        console.log(res);
+                        console.log(res.data);
+                        handleClose();
+                    }).catch(error => console.log(error));
+                }
+            }
+            else {
+                console.log("Email or usertag already exist");
+            }
+        }
     }
 
     return (
@@ -98,7 +166,7 @@ export default function RegisterPopup() {
             <Dialog className={classes.paper} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
                 <DialogContent>
-                    <form className={classes.form} noValidate onSubmit={(event) => handleSubmit(event)} >
+                    <form className={classes.form} onSubmit={(event) => handleSubmit(event)} >
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -109,6 +177,7 @@ export default function RegisterPopup() {
                                     fullWidth
                                     id="profileName"
                                     label="Profile name"
+                                    onInput={e => profile.profileName = e.target.value}
                                     autoFocus
                                 />
                             </Grid>
@@ -120,6 +189,7 @@ export default function RegisterPopup() {
                                     id="userTag"
                                     label="@Usertag"
                                     name="userTag"
+                                    onInput={e => profile.userTag = e.target.value}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -130,6 +200,8 @@ export default function RegisterPopup() {
                                     id="email"
                                     label="Email Address"
                                     name="email"
+                                    type="email"
+                                    onInput={e => account.email = e.target.value}
                                     autoComplete="email"
                                 />
                             </Grid>
@@ -142,6 +214,7 @@ export default function RegisterPopup() {
                                     label="Password"
                                     type="password"
                                     id="password"
+                                    onInput={e => account.password = e.target.value}
                                     autoComplete="current-password"
                                 />
                             </Grid>
@@ -150,13 +223,15 @@ export default function RegisterPopup() {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    name="rpassword"
-                                    label="Repeat Password"
+                                    name="confPassword"
+                                    label="Confirm Password"
                                     type="password"
-                                    id="rpassword"
+                                    id="confPassword"
+                                    helperText={helperText}
+                                    error={showError}
+                                    onInput={e => setConfPassword(e.target.value)}
                                 />
                             </Grid>
-
                         </Grid>
                         <Button
                             type="submit"
