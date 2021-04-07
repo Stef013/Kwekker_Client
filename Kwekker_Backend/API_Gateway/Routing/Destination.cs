@@ -58,6 +58,5 @@ namespace API_Gateway
             HttpResponseMessage response = await client.SendAsync(newRequest);
             return response;
         }
-
     }
 }

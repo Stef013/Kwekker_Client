@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router-dom';
+import RegisterPopup from '../components/RegsiterPopup'
 
 function Copyright() {
     return (
@@ -88,6 +89,7 @@ export default function SignIn() {
                         id="password"
                         autoComplete="current-password"
                     />
+
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
@@ -109,9 +111,7 @@ export default function SignIn() {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
+                            <RegisterPopup />
                         </Grid>
                     </Grid>
                 </form>
