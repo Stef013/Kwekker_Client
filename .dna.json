@@ -1,0 +1,21 @@
+{
+  "envs": {
+    "production": [
+      {
+        "name": "cwekkerclient",
+        "uri": true,
+        "image": "kwekkerclient",
+        "entrypoint": true,
+        "ports": [
+          8080
+        ],
+        "language": "nginx",
+        "languageOptions": {
+          "buildStep": "WORKDIR /build\nCOPY package.json package-lock.jso[n] ./\n# Note that we're going to compile our project in the next command, so we need our development dependencies!\nENV NODE_ENV=development\nRUN npm ci\nCOPY . .\nRUN npm run build && \\\n  rm -rf /usr/share/nginx/html && \\\n  mv -n dist artifact || true && \\\n  mv -n build artifact || true\n\nFROM nginx\nENV NGINX_PORT=8080\nCOPY --from=build /build/artifact /usr/share/nginx/html",
+          "skipEntrypointPrompt": "./public",
+          "image": "node as build"
+        }
+      }
+    ]
+  }
+}
