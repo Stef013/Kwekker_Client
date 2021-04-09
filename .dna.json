@@ -2,9 +2,9 @@
   "envs": {
     "production": [
       {
-        "name": "cwekkerclient",
+        "name": "kwekkerclient",
         "uri": true,
-        "image": "kwekkerclient",
+        "image": "stefv013/kwekkerclient",
         "entrypoint": true,
         "ports": [
           8080
