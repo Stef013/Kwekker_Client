@@ -55,7 +55,6 @@ export default function RegisterPopup() {
         userTag: " ",
     });
 
-
     const handleClickOpen = () => {
         setOpen(true);
     };
