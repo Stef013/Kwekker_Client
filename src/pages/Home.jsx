@@ -19,8 +19,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, secondaryListItems } from '../components/MenuItems';
+import { mainListItems, SecondaryListItems } from '../components/MenuItems';
 import Switch from "@material-ui/core/Switch";
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
     return (
@@ -157,6 +158,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
     const classes = useStyles();
+    const history = useHistory();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -168,7 +170,7 @@ export default function Home() {
 
 
     const [darkState, setDarkState] = React.useState(false);
-    const palletType = darkState ? "dark" : "light";
+    const palletType = darkState ? "light" : "dark";
     const mainPrimaryColor = darkState ? "#03dac5" : "#03dac5";
     const darkTheme = createMuiTheme({
         palette: {
@@ -231,7 +233,7 @@ export default function Home() {
                     <Divider />
                     <List>{mainListItems}</List>
                     <Divider />
-                    <List>{secondaryListItems}</List>
+                    <SecondaryListItems />
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />

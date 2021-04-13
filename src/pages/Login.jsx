@@ -55,7 +55,7 @@ class Login extends React.Component {
     }
 
     navigateHome() {
-        this.props.history.push('/home');
+        this.props.history.push('/');
     }
 
     async handleSubmit(event) {
@@ -68,6 +68,8 @@ class Login extends React.Component {
         }).then(res => {
             console.log(res);
             console.log(res.data);
+            localStorage.setItem('authentication', res.data);
+            this.navigateHome();
         }).catch(error => console.log(error));
     }
 

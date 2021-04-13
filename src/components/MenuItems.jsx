@@ -10,7 +10,7 @@ import MailIcon from '@material-ui/icons/MailOutline';
 import BookmarkIcon from '@material-ui/icons/BookmarkOutlined';
 import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
-
+import { useHistory } from 'react-router-dom';
 
 export const mainListItems = (
     <div>
@@ -47,25 +47,34 @@ export const mainListItems = (
     </div>
 );
 
-export const secondaryListItems = (
-    <div>
-        <ListSubheader inset>Account</ListSubheader>
-        <ListItem button>
-            <ListItemIcon>
-                <AccountIcon />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon>
-                <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon>
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-        </ListItem>
-    </div>
-);
+export function SecondaryListItems() {
+    const history = useHistory();
+
+    const logout = () => {
+        localStorage.clear();
+        history.push("/login")
+    }
+
+    return (
+        <div>
+            <ListSubheader inset>Account</ListSubheader>
+            <ListItem button>
+                <ListItemIcon>
+                    <AccountIcon />
+                </ListItemIcon>
+                <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button>
+                <ListItemIcon>
+                    <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" />
+            </ListItem>
+            <ListItem button onClick={logout}>
+                <ListItemIcon>
+                </ListItemIcon>
+                <ListItemText primary="Logout" />
+            </ListItem>
+        </div>
+    )
+}
