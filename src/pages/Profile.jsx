@@ -1,26 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-//import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SearchIcon from '@material-ui/icons/Search'
-import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, SecondaryListItems } from '../components/MenuItems';
-import Switch from "@material-ui/core/Switch";
+import {Grid, Paper} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import MenuBar from '../components/MenuBar'
 
@@ -38,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
+        width: '100%',
     },
     paper: {
         padding: theme.spacing(2),
@@ -48,30 +32,32 @@ const useStyles = makeStyles((theme) => ({
     fixedHeight: {
         height: 240,
     },
+    
 }));
 
-export default function Home() {
+export default function Profile() {
     const classes = useStyles();
     const history = useHistory();
     
+    
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+    
     return (
         <div className={classes.root}>
             <CssBaseline />
             <MenuBar />
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
+                <Container className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
+                        <Grid item xs={12} md={8} lg={8}>
                             <Paper className={fixedHeightPaper}>
                                 New Kwek
                             </Paper>
                         </Grid>
                         {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
+                        <Grid item xs={12} md={4} lg={4}>
                             <Paper className={fixedHeightPaper}>
                                 Trends
                             </Paper>

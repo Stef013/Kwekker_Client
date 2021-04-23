@@ -25,7 +25,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
+            width: theme.spacing(14),
         },
     },
     appBarSpacer: theme.mixins.toolbar,
