@@ -61,6 +61,8 @@ class Login extends React.Component {
     async handleSubmit(event) {
         event.preventDefault();
 
+        var result;
+
         await axios.post('https://localhost:44344/account/authenticate', this.account, {
             headers: {
                 "Content-Type": 'application/json', 'Accept': 'application/json'
@@ -68,9 +70,16 @@ class Login extends React.Component {
         }).then(res => {
             console.log(res);
             console.log(res.data);
-            localStorage.setItem('authentication', res.data);
-            this.navigateHome();
+            result = res;
         }).catch(error => console.log(error));
+
+        if (result.status === 200) {
+            localStorage.setItem('authentication', result.data);
+            this.navigateHome();
+        }
+        else {
+            console.log("Username or password is incorrect.");
+        }
     }
 
     render() {

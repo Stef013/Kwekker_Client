@@ -2,25 +2,39 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import MenuBar from './components/MenuBar'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
   palette: {
     type: "dark",
     primary: {
       main: "#03dac5"
-    }
+    },
+
   }
 })
 
+// const useStyles = makeStyles((theme) => ({
+//   appBarSpacer: theme.mixins.toolbar,
+//   content: {
+//     flexGrow: 1,
+//     height: '100vh',
+//     overflow: 'auto',
+//   },
+// }));
+
+// const classes = useStyles();
+
 ReactDOM.render(
-  < ThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <BrowserRouter>
       <App />
+
     </BrowserRouter>
-  </ThemeProvider>,
+  </ThemeProvider >,
   document.getElementById('root')
 );
 

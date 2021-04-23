@@ -4,7 +4,7 @@ import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/co
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-//import AppBar from '@material-ui/core/AppBar';
+import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -19,23 +19,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, SecondaryListItems } from '../components/MenuItems';
+import { mainListItems, SecondaryListItems } from './MenuItems';
 import Switch from "@material-ui/core/Switch";
 import { useHistory } from 'react-router-dom';
-import MenuBar from '../components/MenuBar'
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+
 
 const drawerWidth = 240;
 
@@ -156,8 +144,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
-
-export default function Home() {
+export default function MenuBar() {
     const classes = useStyles();
     const history = useHistory();
     const [open, setOpen] = React.useState(true);
@@ -168,6 +155,7 @@ export default function Home() {
         setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
 
     const [darkState, setDarkState] = React.useState(false);
     const palletType = darkState ? "light" : "dark";
@@ -183,38 +171,56 @@ export default function Home() {
     const handleThemeChange = () => {
         setDarkState(!darkState);
     };
+
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <MenuBar />
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                New Kwek
-                            </Paper>
-                        </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                Trends
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                Feed
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
-                </Container>
-            </main>
-        </div>
-    );
+        <ThemeProvider theme={darkTheme}>
+            <AppBar color="background" position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                        Home
+                    </Typography>
+                    <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                            <SearchIcon />
+                        </div>
+                        <InputBase
+                            placeholder="Search…"
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </div>
+                    <Switch checked={darkState} onChange={handleThemeChange} />
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                }}
+                open={open}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+                <Divider />
+                <List>{mainListItems}</List>
+                <Divider />
+                <SecondaryListItems />
+            </Drawer>
+        </ThemeProvider>
+    )
 }
