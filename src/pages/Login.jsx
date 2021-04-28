@@ -74,12 +74,38 @@ class Login extends React.Component {
         }).catch(error => console.log(error));
 
         if (result.status === 200) {
-            localStorage.setItem('authentication', result.data);
+
+            var profileID = await this.fetchProfileID(result.data.accountID)
+
+            var auth = {
+                accountID: result.data.accountID,
+                profileID: profileID,
+                token: result.data.token,
+            }
+
+            console.log("auth: " + JSON.stringify(auth));
+            localStorage.setItem('authentication', auth);
             this.navigateHome();
         }
         else {
             console.log("Username or password is incorrect.");
         }
+    }
+
+    async fetchProfileID(accountID) {
+        var profileID = 0;
+
+        await axios.get('https://localhost:44344/profile/profileid', {
+            params: {
+                accountID: accountID,
+            }
+        }).then(res => {
+            console.log(res);
+            console.log(res.data);
+            profileID = res.data;
+        }).catch(error => console.log(error));
+
+        return profileID
     }
 
     render() {
