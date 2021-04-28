@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import clsx from 'clsx';
 import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,14 +11,11 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchIcon from '@material-ui/icons/Search'
+import { Icon, InlineIcon } from '@iconify/react';
+import duckIcon from '@iconify-icons/mdi/duck';
 import InputBase from '@material-ui/core/InputBase';
 import { mainListItems, SecondaryListItems } from './MenuItems';
 import Switch from "@material-ui/core/Switch";
@@ -25,7 +23,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const drawerWidth = 300;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -127,6 +125,12 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    duckIcon: {
+        width: 30,
+        height: 30,
+        marginRight: 28,
+        color: "#03dac5",
+    },
     inputRoot: {
         color: 'inherit',
     },
@@ -148,14 +152,13 @@ export default function MenuBar() {
     const classes = useStyles();
     const history = useHistory();
     const [open, setOpen] = React.useState(true);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
 
     const [darkState, setDarkState] = React.useState(false);
     const palletType = darkState ? "light" : "dark";
@@ -172,6 +175,17 @@ export default function MenuBar() {
         setDarkState(!darkState);
     };
 
+    const PAGE_TITLES = [
+        { page: "/", title: "Home" },
+        { page: "/profile", title: "Profile" },
+    ]
+
+    useEffect(() => {
+        let title = PAGE_TITLES.find(el => el.page === history.location.pathname)?.title
+        document.title = title;
+        console.log(title);
+    }, []);
+
     return (
         <ThemeProvider theme={darkTheme}>
             <AppBar color="background" position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -186,7 +200,7 @@ export default function MenuBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Home
+                        {PAGE_TITLES.find(el => el.page === history.location.pathname)?.title}
                     </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
@@ -201,7 +215,7 @@ export default function MenuBar() {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    <Switch checked={darkState} onChange={handleThemeChange} />
+                    <Switch color="primary" checked={darkState} onChange={handleThemeChange} />
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -211,7 +225,10 @@ export default function MenuBar() {
                 }}
                 open={open}
             >
+
                 <div className={classes.toolbarIcon}>
+                    <Icon icon={duckIcon} className={classes.duckIcon} />
+                    <Typography variant="h5" style={{ marginRight: 20 }}>Kwekker</Typography>
                     <IconButton onClick={handleDrawerClose}>
                         <ChevronLeftIcon />
                     </IconButton>

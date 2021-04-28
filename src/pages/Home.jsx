@@ -2,25 +2,10 @@ import React from 'react';
 import clsx from 'clsx';
 import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-//import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SearchIcon from '@material-ui/icons/Search'
-import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, SecondaryListItems } from '../components/MenuItems';
-import Switch from "@material-ui/core/Switch";
+import AccountIcon from '@material-ui/icons/AccountCircle';
+import { Grid, Paper, Container, TextField, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import MenuBar from '../components/MenuBar'
 
@@ -28,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
-
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
@@ -36,24 +20,38 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
     },
     container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(5),
+        paddingBottom: theme.spacing(5),
+        paddingLeft: theme.spacing(10),
+        paddingRight: theme.spacing(10),
     },
     paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(2),
         overflow: 'auto',
         flexDirection: 'column',
     },
     fixedHeight: {
         height: 240,
     },
+    submit: {
+        width: 100,
+        borderRadius: 25,
+        marginTop: 15,
+    },
+    accountIcon: {
+        height: 60,
+        width: 60,
+        color: "#03dac5",
+    }
 }));
 
 export default function Home() {
     const classes = useStyles();
     const history = useHistory();
-    
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
@@ -62,21 +60,40 @@ export default function Home() {
             <MenuBar />
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
+                <Container maxWidth="xl" className={classes.container}>
                     <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                New Kwek
+                        <Grid item xs={12} md={8} lg={8}>
+                            <Paper className={classes.paper}  >
+                                <Grid container spacing={3}>
+                                    <Grid item xs={2} md={1} lg={1} style={{textAlign:"right"}}>
+                                        <AccountIcon className={classes.accountIcon}/>
+                                    </Grid>
+                                    <Grid item xs={10} md={11} lg={11}>
+                                    <TextField 
+                                        fullWidth
+                                        multiline
+                                        placeholder="What's on your mind?"
+                                        variant="outlined" />
+                                    </Grid>
+                                </Grid>
+
+                                <div style={{textAlign: "right"}}>
+                                    <Button 
+                                        className={classes.submit}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Kwek
+                                    </Button>
+                                    </div>
                             </Paper>
                         </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
+                        <Grid item xs={12} md={4} lg={4}>
+                            <Paper className={classes.paper}>
                                 Trends
+                                
                             </Paper>
                         </Grid>
-                        {/* Recent Orders */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 Feed

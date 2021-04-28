@@ -1,9 +1,9 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import {Grid, Paper} from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import MenuBar from '../components/MenuBar'
 
@@ -32,16 +32,21 @@ const useStyles = makeStyles((theme) => ({
     fixedHeight: {
         height: 240,
     },
-    
+
 }));
 
 export default function Profile() {
     const classes = useStyles();
     const history = useHistory();
-    
-    
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    
+
+
+
+    useEffect(() => {
+        document.title = 'Profile'
+    }, []);
+
     return (
         <div className={classes.root}>
             <CssBaseline />

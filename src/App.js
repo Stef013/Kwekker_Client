@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -10,10 +11,10 @@ function App() {
   return (
     <main>
       <Switch>
-        <PrivateRoute exact path="/" component={Home} />
-        <Route exact path="/Login" component={Login} />
-        <PrivateRoute exact path="/Profile" component={Profile} />
-        <Route component={Error} />
+        <PrivateRoute exact path="/" component={Home} title="Home" />
+        <Route exact path="/Login" component={Login} title="Login" />
+        <PrivateRoute exact path="/Profile" component={Profile} title="Profile" />
+        <Route component={Error} title="Error" />
       </Switch>
     </main>
   );
