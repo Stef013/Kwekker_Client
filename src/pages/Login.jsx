@@ -63,6 +63,7 @@ class Login extends React.Component {
 
         var result;
 
+        console.log(this.account);
         await axios.post('https://localhost:44344/account/authenticate', this.account, {
             headers: {
                 "Content-Type": 'application/json', 'Accept': 'application/json'
@@ -75,7 +76,7 @@ class Login extends React.Component {
 
         if (result.status === 200) {
 
-            var profileID = await this.fetchProfileID(result.data.accountID)
+            var profileID = await this.fetchProfileID(result.data.accountID);
 
             var auth = {
                 accountID: result.data.accountID,
@@ -83,8 +84,8 @@ class Login extends React.Component {
                 token: result.data.token,
             }
 
-            console.log("auth: " + JSON.stringify(auth));
-            localStorage.setItem('authentication', auth);
+            console.log(auth);
+            localStorage.setItem('authentication', JSON.stringify(auth));
             this.navigateHome();
         }
         else {

@@ -11,9 +11,9 @@ function App() {
   return (
     <main>
       <Switch>
-        <PrivateRoute exact path="/" component={Home} title="Home" />
-        <Route exact path="/Login" component={Login} title="Login" />
-        <PrivateRoute exact path="/Profile" component={Profile} title="Profile" />
+        <PrivateRoute exact path="/" component={Home} />
+        <Route exact path="/Login" component={Login} />
+        <PrivateRoute exact path="/Profile" component={Profile} />
         <Route component={Error} title="Error" />
       </Switch>
     </main>

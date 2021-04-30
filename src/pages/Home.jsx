@@ -22,19 +22,17 @@ const useStyles = makeStyles((theme) => ({
     container: {
         paddingTop: theme.spacing(5),
         paddingBottom: theme.spacing(5),
-        paddingLeft: theme.spacing(10),
-        paddingRight: theme.spacing(10),
     },
     paper: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(3),
+        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
         overflow: 'auto',
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 400,
     },
     submit: {
         width: 100,
@@ -45,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
         height: 60,
         width: 60,
         color: "#03dac5",
+        marginRight: 10,
     }
 }));
 
@@ -60,48 +59,53 @@ export default function Home() {
             <MenuBar />
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="xl" className={classes.container}>
-                    <Grid container spacing={3}>
+                <Container maxWidth="md" className={classes.container} >
+                    <Grid container spacing={2}>
                         <Grid item xs={12} md={8} lg={8}>
-                            <Paper className={classes.paper}  >
-                                <Grid container spacing={3}>
-                                    <Grid item xs={2} md={1} lg={1} style={{textAlign:"right"}}>
-                                        <AccountIcon className={classes.accountIcon}/>
-                                    </Grid>
-                                    <Grid item xs={10} md={11} lg={11}>
-                                    <TextField 
-                                        fullWidth
-                                        multiline
-                                        placeholder="What's on your mind?"
-                                        variant="outlined" />
-                                    </Grid>
+                            <Grid
+                                spacing={2}
+                                direction="column"
+                                container
+                            >
+                                <Grid item>
+                                    <Paper className={classes.paper}  >
+                                        <div style={{ display: "flex", flexDirection: "row" }}>
+                                            <AccountIcon className={classes.accountIcon} />
+                                            <TextField
+                                                fullWidth
+                                                multiline
+                                                placeholder="What's on your mind?"
+                                                variant="outlined" />
+                                        </div>
+                                        <div style={{ textAlign: "right" }}>
+                                            <Button
+                                                className={classes.submit}
+                                                variant="contained"
+                                                color="primary"
+                                            >
+                                                Kwek
+                                            </Button>
+                                        </div>
+                                    </Paper>
                                 </Grid>
 
-                                <div style={{textAlign: "right"}}>
-                                    <Button 
-                                        className={classes.submit}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        Kwek
-                                    </Button>
-                                    </div>
-                            </Paper>
+                                <Grid item>
+                                    <Paper className={classes.paper}>
+                                        Feed
+                                    </Paper>
+                                </Grid>
+
+                            </Grid>
                         </Grid>
+
                         <Grid item xs={12} md={4} lg={4}>
-                            <Paper className={classes.paper}>
+                            <Paper className={fixedHeightPaper}>
                                 Trends
-                                
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                Feed
                             </Paper>
                         </Grid>
                     </Grid>
                 </Container>
             </main>
-        </div>
+        </div >
     );
 }
