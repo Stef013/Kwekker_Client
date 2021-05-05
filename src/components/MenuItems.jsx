@@ -12,40 +12,88 @@ import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import { useHistory } from 'react-router-dom';
 
-export const mainListItems = (
-    <div>
-        <ListItem button>
-            <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
-                <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
-                <ExploreIcon />
-            </ListItemIcon>
-            <ListItemText primary="Explore" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
-                <NotificationsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Notifications" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
-                <MailIcon />
-            </ListItemIcon>
-            <ListItemText primary="Messages" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
-                <BookmarkIcon />
-            </ListItemIcon>
-            <ListItemText primary="Bookmarks" />
-        </ListItem>
-    </div>
-);
+// export const mainListItems = (
+//     <div>
+//         <ListItem button>
+//             <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+//                 <HomeIcon />
+//             </ListItemIcon>
+//             <ListItemText primary="Home" />
+//         </ListItem>
+//         <ListItem button>
+//             <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+//                 <ExploreIcon />
+//             </ListItemIcon>
+//             <ListItemText primary="Explore" />
+//         </ListItem>
+//         <ListItem button>
+//             <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+//                 <NotificationsIcon />
+//             </ListItemIcon>
+//             <ListItemText primary="Notifications" />
+//         </ListItem>
+//         <ListItem button>
+//             <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+//                 <MailIcon />
+//             </ListItemIcon>
+//             <ListItemText primary="Messages" />
+//         </ListItem>
+//         <ListItem button>
+//             <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+//                 <BookmarkIcon />
+//             </ListItemIcon>
+//             <ListItemText primary="Bookmarks" />
+//         </ListItem>
+//     </div>
+// );
+
+export function MainListItems() {
+    const history = useHistory();
+
+    const Home = () => {
+        localStorage.clear();
+        history.push("/home")
+    }
+
+    const Messages = () => {
+        history.push("/messages")
+    }
+
+    return (
+        <div style={{ marginTop: 20, marginBottom: 20 }}>
+            <ListItem button onClick={Home}>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+                    <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+                    <ExploreIcon />
+                </ListItemIcon>
+                <ListItemText primary="Explore" />
+            </ListItem>
+            <ListItem button>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+                    <NotificationsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Notifications" />
+            </ListItem>
+            <ListItem button onClick={Messages}>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+                    <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Messages" />
+            </ListItem>
+            <ListItem button>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
+                    <BookmarkIcon />
+                </ListItemIcon>
+                <ListItemText primary="Bookmarks" />
+            </ListItem>
+        </div>
+    )
+}
 
 export function SecondaryListItems() {
     const history = useHistory();
@@ -61,21 +109,21 @@ export function SecondaryListItems() {
 
     return (
         <div>
-            <ListSubheader inset style={{ marginLeft: 40}}>Account</ListSubheader>
+            <ListSubheader inset style={{ marginLeft: 40 }}>Account</ListSubheader>
             <ListItem button onClick={profile}>
-                <ListItemIcon style={{color:"#03dac5", marginLeft: 40}}>
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }}>
                     <AccountIcon />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
             </ListItem>
             <ListItem button>
-                <ListItemIcon style={{color:"#03dac5", marginLeft: 40}} >
+                <ListItemIcon style={{ color: "#03dac5", marginLeft: 40 }} >
                     <SettingsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Settings" />
             </ListItem>
             <ListItem button onClick={logout}>
-                <ListItemIcon style={{marginLeft: 40}}>
+                <ListItemIcon style={{ marginLeft: 40 }}>
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
             </ListItem>

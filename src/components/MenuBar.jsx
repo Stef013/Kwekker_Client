@@ -17,7 +17,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import { Icon, InlineIcon } from '@iconify/react';
 import duckIcon from '@iconify-icons/mdi/duck';
 import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, SecondaryListItems } from './MenuItems';
+import { MainListItems, SecondaryListItems } from './MenuItems';
 import Switch from "@material-ui/core/Switch";
 import { useHistory } from 'react-router-dom';
 
@@ -178,6 +178,7 @@ export default function MenuBar() {
     const PAGE_TITLES = [
         { page: "/", title: "Home" },
         { page: "/profile", title: "Profile" },
+        { page: "/messages", title: "Messages" },
     ]
 
     useEffect(() => {
@@ -234,7 +235,7 @@ export default function MenuBar() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
+                <MainListItems />
                 <Divider />
                 <SecondaryListItems />
             </Drawer>
