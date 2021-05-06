@@ -51,8 +51,7 @@ export function MainListItems() {
     const history = useHistory();
 
     const Home = () => {
-        localStorage.clear();
-        history.push("/home")
+        history.push("/")
     }
 
     const Messages = () => {

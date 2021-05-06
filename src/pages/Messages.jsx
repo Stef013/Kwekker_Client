@@ -5,11 +5,12 @@ import Container from '@material-ui/core/Container';
 import { Grid, Paper, Typography, Card, CardHeader, CardActions, CardContent, Avatar, IconButton, CardMedia } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import MenuBar from '../components/MenuBar';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { teal } from '@material-ui/core/colors'
+import NewMessagePopup from '../components/NewMessagePopup'
 import axios from 'axios';
 
 const useStyles = (theme) => ({
@@ -42,7 +43,9 @@ class Messages extends React.Component {
         super(props);
 
         this.state = {
-            gotMessages: false
+            gotMessages: false,
+            messagesnotnull: false,
+            profileID: 0,
         };
 
         this.messages = [];
@@ -52,10 +55,12 @@ class Messages extends React.Component {
         console.log("begin");
 
         var auth = JSON.parse(localStorage.getItem('authentication'));
+        this.setState({ profileID: auth.profileID });
 
-        await axios.get('https://localhost:44344/messageproducer/recieved', {
+        //Hardcoded profileID later aanpassen.
+        await axios.get('https://localhost:44344/message/recieved', {
             params: {
-                profileId: 2
+                profileId: this.state.profileID
             },
             headers: {
                 "Authorization": "Bearer " + auth.token,
@@ -65,13 +70,18 @@ class Messages extends React.Component {
             console.log(res.data);
             this.messages = res.data;
             this.setState({ gotMessages: true });
+
+            if (this.messages.length > 0) {
+                this.setState({ messagesnotnull: true });
+            }
+
         }).catch(error => console.log(error));
         console.log("end");
     }
 
     render() {
         const { classes } = this.props;
-        const { gotMessages } = this.state;
+        const { gotMessages, profileID, messagesnotnull } = this.state;
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -79,57 +89,59 @@ class Messages extends React.Component {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     {gotMessages ?
-                        (
-                            <Container maxWidth="md" className={classes.container} >
-                                <Grid container spacing={2}>
+                        messagesnotnull ?
+                            (
+                                <Container maxWidth="md" className={classes.container} >
+                                    <Grid container spacing={2}>
 
-                                    {this.messages.map(function (message, idx) {
-                                        return (
-                                            <Grid item xs={12} md={10} lg={9}>
-                                                <Card >
-                                                    <CardHeader
-                                                        avatar={
-                                                            <Avatar aria-label="recipe" className={classes.avatar}>
-                                                                R
+                                        {this.messages.map(function (message, idx) {
+                                            return (
+                                                <Grid item xs={12} md={10} lg={9}>
+                                                    <Card >
+                                                        <CardHeader
+                                                            avatar={
+                                                                <Avatar aria-label="recipe" className={classes.avatar}>
+                                                                    R
                                                             </Avatar>
-                                                        }
-                                                        action={
-                                                            <IconButton aria-label="settings">
-                                                                <MoreVertIcon />
+                                                            }
+                                                            action={
+                                                                <IconButton aria-label="settings">
+                                                                    <MoreVertIcon />
+                                                                </IconButton>
+                                                            }
+                                                            title={"sender: " + message.senderID}
+                                                            subheader={new Date(message.dateTime).toLocaleDateString() + " " + new Date(message.dateTime).toLocaleTimeString()}
+                                                        />
+                                                        <CardMedia
+                                                            className={classes.media}
+                                                            title="Paella dish"
+                                                        />
+
+                                                        <CardContent>
+                                                            <Typography variant="body2" color="textSecondary" component="p">
+                                                                {message.message}
+                                                            </Typography>
+                                                        </CardContent>
+                                                        <CardActions disableSpacing>
+                                                            <IconButton color="secondary" aria-label="add to favorites">
+                                                                <DeleteIcon />
                                                             </IconButton>
-                                                        }
-                                                        title={"sender: " + message.senderID}
-                                                        subheader={new Date(message.dateTime).toLocaleDateString() + " " + new Date(message.dateTime).toLocaleTimeString()}
-                                                    />
-                                                    <CardMedia
-                                                        className={classes.media}
-                                                        title="Paella dish"
-                                                    />
 
-                                                    <CardContent>
-                                                        <Typography variant="body2" color="textSecondary" component="p">
-                                                            This impressive paella is a perfect party dish and a fun meal to cook together with your
-                                                            guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                                                  </Typography>
-                                                    </CardContent>
-                                                    <CardActions disableSpacing>
-                                                        <IconButton aria-label="add to favorites">
-                                                            <FavoriteIcon />
-                                                        </IconButton>
-                                                        <IconButton aria-label="share">
-                                                            <ShareIcon />
-                                                        </IconButton>
-
-
-                                                    </CardActions>
-                                                </Card>
-                                            </Grid>
-                                        )
-                                    })}
-
-                                </Grid>
-                            </Container>
-                        )
+                                                            <NewMessagePopup senderID={profileID} recieverID={message.senderID} />
+                                                        </CardActions>
+                                                    </Card>
+                                                </Grid>
+                                            )
+                                        })}
+                                    </Grid>
+                                </Container>
+                            )
+                            :
+                            (
+                                <Typography align="center" color="textSecondary" variant="h4" style={{ marginTop: 350 }}  >
+                                    You have no messages yet.
+                                </Typography>
+                            )
                         :
                         (
                             <Typography align="center" color="textSecondary" variant="h4" style={{ marginTop: 350 }}  >

@@ -139,7 +139,7 @@ class Profile extends React.Component {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Paper className={classes.paper}>
-                                            Tweets
+                                            Kweks
                                         </Paper>
                                     </Grid>
                                 </Grid>
