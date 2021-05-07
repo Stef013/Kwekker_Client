@@ -72,11 +72,8 @@ export default function NewMessagePopup(props) {
             <IconButton color="primary" onClick={handleClickOpen} aria-label="add to favorites">
                 <MailIcon />
             </IconButton>
-            {/* <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                Reply
-            </Button> */}
             <Dialog className={classes.paper} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Send message to: {props.recieverID}</DialogTitle>
+                <DialogTitle id="form-dialog-title">Send message to {props.profileName}</DialogTitle>
                 <DialogContent>
                     <form onSubmit={(event) => handleSubmit(event)} >
 

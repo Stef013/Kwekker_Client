@@ -28,7 +28,7 @@ const useStyles = (theme) => ({
         paddingBottom: theme.spacing(5),
     },
     avatar: {
-        backgroundColor: teal[500],
+        backgroundColor: "#03dac5",
     },
     messageCard: {
 
@@ -51,16 +51,27 @@ class Messages extends React.Component {
         this.messages = [];
     }
 
-    async componentDidMount() {
-        console.log("begin");
+    async getProfileNames() {
+        for (var i = 0; i < this.messages.length; i++) {
+            await axios.get('https://localhost:44344/profile/profileName', {
+                params: {
+                    profileId: this.messages[i].senderID
+                }
+            }).then(res => {
+                console.log(res);
+                console.log(res.data);
+                this.messages[i].profileName = res.data;
+            }).catch(error => console.log(error));
+        }
+    }
 
+    async componentDidMount() {
         var auth = JSON.parse(localStorage.getItem('authentication'));
         this.setState({ profileID: auth.profileID });
 
-        //Hardcoded profileID later aanpassen.
         await axios.get('https://localhost:44344/message/recieved', {
             params: {
-                profileId: this.state.profileID
+                profileId: auth.profileID
             },
             headers: {
                 "Authorization": "Bearer " + auth.token,
@@ -69,14 +80,16 @@ class Messages extends React.Component {
             console.log(res);
             console.log(res.data);
             this.messages = res.data;
-            this.setState({ gotMessages: true });
-
-            if (this.messages.length > 0) {
-                this.setState({ messagesnotnull: true });
-            }
-
         }).catch(error => console.log(error));
-        console.log("end");
+
+        if (this.messages.length > 0) {
+
+            await this.getProfileNames();
+            this.setState({ messagesnotnull: true });
+            console.log(this.messages);
+        }
+
+        this.setState({ gotMessages: true });
     }
 
     render() {
@@ -94,22 +107,22 @@ class Messages extends React.Component {
                                 <Container maxWidth="md" className={classes.container} >
                                     <Grid container spacing={2}>
 
-                                        {this.messages.map(function (message, idx) {
+                                        {this.messages.reverse().map(function (message, idx) {
                                             return (
                                                 <Grid item xs={12} md={10} lg={9}>
                                                     <Card >
                                                         <CardHeader
                                                             avatar={
                                                                 <Avatar aria-label="recipe" className={classes.avatar}>
-                                                                    R
-                                                            </Avatar>
+                                                                    {message.profileName.charAt(0)}
+                                                                </Avatar>
                                                             }
                                                             action={
                                                                 <IconButton aria-label="settings">
                                                                     <MoreVertIcon />
                                                                 </IconButton>
                                                             }
-                                                            title={"sender: " + message.senderID}
+                                                            title={message.profileName}
                                                             subheader={new Date(message.dateTime).toLocaleDateString() + " " + new Date(message.dateTime).toLocaleTimeString()}
                                                         />
                                                         <CardMedia
@@ -127,7 +140,7 @@ class Messages extends React.Component {
                                                                 <DeleteIcon />
                                                             </IconButton>
 
-                                                            <NewMessagePopup senderID={profileID} recieverID={message.senderID} />
+                                                            <NewMessagePopup senderID={profileID} recieverID={message.senderID} profileName={message.profileName} />
                                                         </CardActions>
                                                     </Card>
                                                 </Grid>

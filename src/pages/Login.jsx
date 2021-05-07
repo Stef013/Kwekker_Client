@@ -71,17 +71,17 @@ class Login extends React.Component {
         }).then(res => {
             console.log(res);
             console.log(res.data);
-            result = res;
+            result = res.data;
         }).catch(error => console.log(error));
 
-        if (result.status === 200) {
+        if (result.accountID > 0) {
 
-            var profileID = await this.fetchProfileID(result.data.accountID);
+            var profileID = await this.fetchProfileID(result.accountID);
 
             var auth = {
-                accountID: result.data.accountID,
+                accountID: result.accountID,
                 profileID: profileID,
-                token: result.data.token,
+                token: result.token,
             }
 
             console.log(auth);
