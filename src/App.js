@@ -8,6 +8,7 @@ import Error from './pages/Error';
 import PrivateRoute from './components/PrivateRoute';
 import { Route, Switch } from 'react-router-dom';
 
+
 function App() {
   return (
     <main>
