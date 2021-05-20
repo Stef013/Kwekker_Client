@@ -64,7 +64,7 @@ class Login extends React.Component {
         var result;
 
         console.log(this.account);
-        await axios.post('https://localhost:44344/account/authenticate', this.account, {
+        await axios.post('https://kwekkerapigateway.azurewebsites.net/account/authenticate', this.account, {
             headers: {
                 "Content-Type": 'application/json', 'Accept': 'application/json'
             }
@@ -96,7 +96,7 @@ class Login extends React.Component {
     async fetchProfileID(accountID) {
         var profileID = 0;
 
-        await axios.get('https://localhost:44344/profile/profileid', {
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/profileid', {
             params: {
                 accountID: accountID,
             }

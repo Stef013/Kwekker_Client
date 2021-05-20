@@ -80,7 +80,7 @@ class Profile extends React.Component {
 
         var auth = JSON.parse(localStorage.getItem('authentication'));
 
-        await axios.get('https://localhost:44344/profile/account', {
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/account', {
             params: {
                 accountID: auth.accountID
             },
