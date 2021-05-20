@@ -83,7 +83,7 @@ export default function RegisterPopup() {
 
         console.log("checkemail");
 
-        await axios.get('https://localhost:44344/account/email', { params: { email: account.email } })
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/account/email', { params: { email: account.email } })
             .then(res => {
                 console.log(res);
                 console.log("emailcheck: " + res.data);
@@ -101,7 +101,7 @@ export default function RegisterPopup() {
 
         console.log("checktag");
 
-        await axios.get('https://localhost:44344/profile/userTag', { params: { usertag: profile.userTag } })
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/userTag', { params: { usertag: profile.userTag } })
             .then(res => {
                 console.log(res);
                 console.log("tagcheck: " + res.data);
@@ -126,7 +126,7 @@ export default function RegisterPopup() {
 
                 var result = false;
 
-                await axios.post('https://localhost:44344/account', account, {
+                await axios.post('https://kwekkerapigateway.azurewebsites.net/account', account, {
                     headers: {
                         "Content-Type": 'application/json', 'Accept': 'application/json'
                     }
@@ -140,7 +140,7 @@ export default function RegisterPopup() {
 
                 if (result) {
 
-                    await axios.post('https://localhost:44344/profile/', profile, {
+                    await axios.post('https://kwekkerapigateway.azurewebsites.net/profile/', profile, {
                         headers: {
                             "Content-Type": 'application/json', 'Accept': 'application/json'
                         }
