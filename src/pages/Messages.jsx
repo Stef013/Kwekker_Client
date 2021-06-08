@@ -69,7 +69,7 @@ class Messages extends React.Component {
         var auth = JSON.parse(localStorage.getItem('authentication'));
         this.setState({ profileID: auth.profileID });
 
-        await axios.get('https://localhost:44344/message/recieved', {
+        await axios.get('https://kwekkermessageproducer.azurewebsites.net/message/recieved', {
             params: {
                 profileId: auth.profileID
             },
