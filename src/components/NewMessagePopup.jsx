@@ -57,7 +57,7 @@ export default function NewMessagePopup(props) {
         console.log(message);
         var auth = JSON.parse(localStorage.getItem('authentication'));
 
-        await axios.post('https://localhost:44344/message', message, {
+        await axios.post('https://kwekkerapigateway.azurewebsites.net/message', message, {
             headers: {
                 "Content-Type": 'application/json', 'Accept': 'application/json', "Authorization": "Bearer " + auth.token
             }

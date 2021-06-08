@@ -53,7 +53,7 @@ class Messages extends React.Component {
 
     async getProfileNames() {
         for (var i = 0; i < this.messages.length; i++) {
-            await axios.get('https://localhost:44344/profile/profileName', {
+            await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/profileName', {
                 params: {
                     profileId: this.messages[i].senderID
                 }
@@ -69,7 +69,7 @@ class Messages extends React.Component {
         var auth = JSON.parse(localStorage.getItem('authentication'));
         this.setState({ profileID: auth.profileID });
 
-        await axios.get('https://kwekkermessageproducer.azurewebsites.net/message/recieved', {
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/message/recieved', {
             params: {
                 profileId: auth.profileID
             },
