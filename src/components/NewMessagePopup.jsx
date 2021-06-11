@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, IconButton, TextField, Dialog, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+import { CircularProgress, Button, IconButton, TextField, Dialog, DialogContent, DialogTitle, Snackbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/MailOutline';
+import Alert from '@material-ui/lab/Alert';
 import axios from 'axios'
 import moment from "moment";
 
@@ -25,12 +26,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function ButtonComponent(props) {
+    const classes = useStyles();
+    const { onClick, loading } = props;
+    return (
+        <Button type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={onClick}
+            disabled={loading}>
+            {loading && <CircularProgress size={25} />}
+            {!loading && 'Send'}
+        </Button>
+    );
+}
 
 export default function NewMessagePopup(props) {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
-    const [showError, setShowError] = React.useState(false);
-    const [helperText, setHelperText] = React.useState();
+    const [openError, setOpenError] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const [message, setMessage] = React.useState({
         ID: 0,
         senderID: 0,
@@ -44,11 +61,22 @@ export default function NewMessagePopup(props) {
     };
 
     const handleClose = () => {
+        setLoading(false);
         setOpen(false);
+        setOpenError(false);
+    };
+
+    const handleCloseError = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenError(false);
     };
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setLoading(true);
 
         message.senderID = props.senderID;
         message.recieverID = props.recieverID;
@@ -56,15 +84,27 @@ export default function NewMessagePopup(props) {
 
         console.log(message);
         var auth = JSON.parse(localStorage.getItem('authentication'));
-
+        var response = "";
         await axios.post('https://kwekkerapigateway.azurewebsites.net/message', message, {
             headers: {
                 "Content-Type": 'application/json', 'Accept': 'application/json', "Authorization": "Bearer " + auth.token
             }
         }).then(res => {
             console.log(res);
+            response = res;
+        }).catch(error => {
+            console.log(error);
+            setOpenError(true);
+            setLoading(false);
+        });
+
+        if (response.data === "") {
             handleClose();
-        }).catch(error => console.log(error));
+        }
+        else {
+            setOpenError(true);
+            setLoading(false);
+        }
     }
 
     return (
@@ -73,6 +113,13 @@ export default function NewMessagePopup(props) {
                 <MailIcon />
             </IconButton>
             <Dialog className={classes.paper} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <div className={classes.root}>
+                    <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                        <Alert onClose={handleCloseError} severity="error" variant="filled" className={classes.alert}>
+                            An Error has occured.
+                        </Alert>
+                    </Snackbar>
+                </div>
                 <DialogTitle id="form-dialog-title">Send message to {props.profileName}</DialogTitle>
                 <DialogContent>
                     <form onSubmit={(event) => handleSubmit(event)} >
@@ -90,15 +137,7 @@ export default function NewMessagePopup(props) {
                             autoFocus
                         />
 
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Send
-                         </Button>
+                        <ButtonComponent loading={loading} />
 
                     </form>
                 </DialogContent>

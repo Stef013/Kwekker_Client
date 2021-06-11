@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import { Grid, Paper, Typography, Card, CardHeader, CardActions, CardContent, Avatar, IconButton, CardMedia } from '@material-ui/core';
+import { Grid, Paper, Typography, Card, CardHeader, Avatar } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { teal } from '@material-ui/core/colors'
 import MenuBar from '../components/MenuBar';
@@ -60,8 +60,6 @@ const useStyles = (theme) => ({
     }
 });
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
 class Profile extends React.Component {
 
     constructor(props) {
@@ -70,13 +68,11 @@ class Profile extends React.Component {
         this.state = {
             gotProfile: false,
             profile: [],
+            profiles: [],
         };
-
-
     }
 
     async componentDidMount() {
-        console.log("begin");
 
         var auth = JSON.parse(localStorage.getItem('authentication'));
 
@@ -88,17 +84,30 @@ class Profile extends React.Component {
                 "Authorization": "Bearer " + auth.token,
             }
         }).then(res => {
-            console.log(res);
-            console.log(res.data);
             this.setState({ profile: res.data });
-            this.setState({ gotProfile: true });
+            
         }).catch(error => console.log(error));
-        console.log("end");
+
+        if(this.state.profile != null)
+        {
+            await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/profiles', {
+            params: {
+                profileID: auth.profileID
+            },
+            headers: {
+                "Authorization": "Bearer " + auth.token,
+            }
+            }).then(res => {
+                this.setState({ profiles: res.data });
+            }).catch(error => console.log(error));
+        
+            this.setState({ gotProfile: true });
+        }
     }
 
     render() {
         const { classes } = this.props;
-        const { gotProfile, profile } = this.state;
+        const { gotProfile, profile, profiles } = this.state;
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -160,26 +169,25 @@ class Profile extends React.Component {
                                         <Paper className={classes.paper}>
                                             Suggestions
                                             
-                                            {profile.following.map(function (following) {
+                                            {profiles.map(function (p) {
                                                 return(
                                              <Grid item >
                                                  <Card className={classes.card}>
                                                      <CardHeader
                                                         avatar={
                                                             <Avatar aria-label="recipe" className={classes.avatar}>
-                                                                {following.profileName.charAt(0)}
+                                                                {p.profileName.charAt(0)}
                                                             </Avatar>
                                                         }
                                                         action={
-                                                            <NewMessagePopup senderID={profile.id} recieverID={following.id} profileName={following.profileName} />
+                                                            <NewMessagePopup senderID={profile.id} recieverID={p.id} profileName={p.profileName} />
                                                         }
-                                                        title={following.profileName}
-                                                        subheader={following.userTag}
+                                                        title={p.profileName}
+                                                        subheader={p.userTag}
                                                     />
                                                 </Card>
                                              </Grid>
-                                             )
-                                            
+                                             ) 
                                         })}
                                         </Paper>
                                     </Grid>

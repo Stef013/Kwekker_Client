@@ -1,12 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import AccountIcon from '@material-ui/icons/AccountCircle';
 import { Grid, Paper, Container, TextField, Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import MenuBar from '../components/MenuBar'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +46,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
     const classes = useStyles();
-    const history = useHistory();
-
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (

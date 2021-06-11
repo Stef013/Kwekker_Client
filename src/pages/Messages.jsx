@@ -2,14 +2,11 @@ import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import { Grid, Paper, Typography, Card, CardHeader, CardActions, CardContent, Avatar, IconButton, CardMedia } from '@material-ui/core';
+import { Grid, Typography, Card, CardHeader, CardActions, CardContent, Avatar, IconButton, CardMedia } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import MenuBar from '../components/MenuBar';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { teal } from '@material-ui/core/colors'
 import NewMessagePopup from '../components/NewMessagePopup'
 import axios from 'axios';
 
@@ -29,13 +26,8 @@ const useStyles = (theme) => ({
     },
     avatar: {
         backgroundColor: "#03dac5",
-    },
-    messageCard: {
-
     }
-
 });
-
 
 class Messages extends React.Component {
 
@@ -145,7 +137,7 @@ class Messages extends React.Component {
                                                     </Card>
                                                 </Grid>
                                             )
-                                        })}
+                                        }, this)}
                                     </Grid>
                                 </Container>
                             )
