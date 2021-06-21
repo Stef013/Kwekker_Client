@@ -1,99 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
-import { fade, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SearchIcon from '@material-ui/icons/Search'
-import InputBase from '@material-ui/core/InputBase';
-import { mainListItems, secondaryListItems } from '../components/MenuItems';
-import Switch from "@material-ui/core/Switch";
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-const drawerWidth = 240;
+import AccountIcon from '@material-ui/icons/AccountCircle';
+import { Grid, Paper, Container, TextField, Button } from '@material-ui/core';
+import MenuBar from '../components/MenuBar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-    },
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
-    },
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    menuButton: {
-        marginRight: 36,
-    },
-    menuButtonHidden: {
-        display: 'none',
-    },
-    title: {
-        flexGrow: 1,
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-        },
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
@@ -102,166 +17,90 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
     },
     container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(5),
+        paddingBottom: theme.spacing(5),
     },
     paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
         overflow: 'auto',
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 400,
     },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
+    submit: {
+        width: 100,
+        borderRadius: 25,
+        marginTop: 15,
     },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '20ch',
-            '&:focus': {
-                width: '30ch',
-            },
-        },
-    },
+    accountIcon: {
+        height: 60,
+        width: 60,
+        color: "#03dac5",
+        marginRight: 10,
+    }
 }));
 
 export default function Home() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-
-    const [darkState, setDarkState] = React.useState(false);
-    const palletType = darkState ? "dark" : "light";
-    const mainPrimaryColor = darkState ? "#03dac5" : "#03dac5";
-    const darkTheme = createMuiTheme({
-        palette: {
-            type: palletType,
-            primary: {
-                main: mainPrimaryColor
-            }
-        }
-    });
-    const handleThemeChange = () => {
-        setDarkState(!darkState);
-    };
-
     return (
-        <ThemeProvider theme={darkTheme}>
-            <div className={classes.root}>
-                <CssBaseline />
-                <AppBar color="background" position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                    <Toolbar className={classes.toolbar}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                            Home
-                    </Typography>
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                                placeholder="Search…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </div>
-                        <Switch checked={darkState} onChange={handleThemeChange} />
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-                    }}
-                    open={open}
-                >
-                    <div className={classes.toolbarIcon}>
-                        <IconButton onClick={handleDrawerClose}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <List>{mainListItems}</List>
-                    <Divider />
-                    <List>{secondaryListItems}</List>
-                </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} />
-                    <Container maxWidth="lg" className={classes.container}>
-                        <Grid container spacing={3}>
-                            {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper className={fixedHeightPaper}>
-                                    New Kwek
-                            </Paper>
-                            </Grid>
-                            {/* Recent Deposits */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper className={fixedHeightPaper}>
-                                    Trends
-                            </Paper>
-                            </Grid>
-                            {/* Recent Orders */}
-                            <Grid item xs={12}>
-                                <Paper className={classes.paper}>
-                                    Feed
-                            </Paper>
+        <div className={classes.root}>
+            <CssBaseline />
+            <MenuBar />
+            <main className={classes.content}>
+                <div className={classes.appBarSpacer} />
+                <Container maxWidth="md" className={classes.container} >
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={8} lg={8}>
+                            <Grid
+                                spacing={2}
+                                direction="column"
+                                container
+                            >
+                                <Grid item>
+                                    <Paper className={classes.paper}  >
+                                        <div style={{ display: "flex", flexDirection: "row" }}>
+                                            <AccountIcon className={classes.accountIcon} />
+                                            <TextField
+                                                fullWidth
+                                                multiline
+                                                placeholder="What's on your mind?"
+                                                variant="outlined" />
+                                        </div>
+                                        <div style={{ textAlign: "right" }}>
+                                            <Button
+                                                className={classes.submit}
+                                                variant="contained"
+                                                color="primary"
+                                            >
+                                                Kwek
+                                            </Button>
+                                        </div>
+                                    </Paper>
+                                </Grid>
+
+                                <Grid item>
+                                    <Paper className={classes.paper}>
+                                        Feed
+                                    </Paper>
+                                </Grid>
+
                             </Grid>
                         </Grid>
-                        <Box pt={4}>
-                            <Copyright />
-                        </Box>
-                    </Container>
-                </main>
-            </div>
-        </ThemeProvider>
+
+                        <Grid item xs={12} md={4} lg={4}>
+                            <Paper className={fixedHeightPaper}>
+                                Trends
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </Container>
+            </main>
+        </div >
     );
 }

@@ -1,13 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
+import { Button, TextField, DialogContent, Dialog, DialogTitle, Link, Grid, CircularProgress, Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
 
@@ -42,7 +35,10 @@ export default function RegisterPopup() {
     const classes = useStyles();
     const [confPassword, setConfPassword] = React.useState('');
     const [showError, setShowError] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
+    const [errorMsg, setErrorMsg] = React.useState("Something went wrong.");
     const [helperText, setHelperText] = React.useState();
+    const [loading, setLoading] = React.useState(false);
     const [account, setAccount] = React.useState({
         ID: 0,
         email: " ",
@@ -60,11 +56,24 @@ export default function RegisterPopup() {
     };
 
     const handleClose = () => {
+        setLoading(false);
+        setErrorMsg("Something went wrong.");
+        setHelperText(null)
+        setShowError(false);
+        setOpenError(false);
         setOpen(false);
     };
 
+    const handleCloseError = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenError(false);
+    };
+
     function checkPasswords() {
-        if (account.password == confPassword) {
+        if (account.password === confPassword) {
             console.log(account.password)
             console.log(confPassword)
             return true;
@@ -74,6 +83,7 @@ export default function RegisterPopup() {
             setHelperText("Passwords don't match!")
             console.log(account.password)
             console.log(confPassword)
+            setLoading(false);
             return false;
         }
     }
@@ -83,7 +93,7 @@ export default function RegisterPopup() {
 
         console.log("checkemail");
 
-        await axios.get('https://localhost:44344/account/email', { params: { email: account.email } })
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/account/email', { params: { email: account.email } })
             .then(res => {
                 console.log(res);
                 console.log("emailcheck: " + res.data);
@@ -101,7 +111,7 @@ export default function RegisterPopup() {
 
         console.log("checktag");
 
-        await axios.get('https://localhost:44344/profile/userTag', { params: { usertag: profile.userTag } })
+        await axios.get('https://kwekkerapigateway.azurewebsites.net/profile/userTag', { params: { usertag: profile.userTag } })
             .then(res => {
                 console.log(res);
                 console.log("tagcheck: " + res.data);
@@ -116,6 +126,7 @@ export default function RegisterPopup() {
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setLoading(true);
 
         if (checkPasswords()) {
 
@@ -126,7 +137,7 @@ export default function RegisterPopup() {
 
                 var result = false;
 
-                await axios.post('https://localhost:44344/account', account, {
+                await axios.post('https://kwekkerapigateway.azurewebsites.net/account', account, {
                     headers: {
                         "Content-Type": 'application/json', 'Accept': 'application/json'
                     }
@@ -136,11 +147,14 @@ export default function RegisterPopup() {
 
                     result = res.data.success;
                     profile.accountID = res.data.accountID;
-                }).catch(error => console.log(error));
+                }).catch(error => {
+                    console.log(error);
+                    setErrorMsg("Database Error!");
+                    setLoading(false);
+                });
 
                 if (result) {
-
-                    await axios.post('https://localhost:44344/profile/', profile, {
+                    await axios.post('https://kwekkerapigateway.azurewebsites.net/profile/', profile, {
                         headers: {
                             "Content-Type": 'application/json', 'Accept': 'application/json'
                         }
@@ -148,11 +162,19 @@ export default function RegisterPopup() {
                         console.log(res);
                         console.log(res.data);
                         handleClose();
-                    }).catch(error => console.log(error));
+                    }).catch(error => {
+                        console.log(error);
+                        setErrorMsg("Database Error!");
+                        setOpenError(true);
+                        setLoading(false);
+                    });
                 }
             }
             else {
                 console.log("Email or usertag already exist");
+                setErrorMsg("Email or usertag already exist");
+                setOpenError(true);
+                setLoading(false);
             }
         }
     }
@@ -164,6 +186,13 @@ export default function RegisterPopup() {
             </Link>
             <Dialog className={classes.paper} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
+                <div className={classes.root}>
+                    <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                        <Alert onClose={handleCloseError} severity="error" variant="filled" className={classes.alert}>
+                            {errorMsg}
+                        </Alert>
+                    </Snackbar>
+                </div>
                 <DialogContent>
                     <form className={classes.form} onSubmit={(event) => handleSubmit(event)} >
                         <Grid container spacing={2}>
@@ -232,15 +261,15 @@ export default function RegisterPopup() {
                                 />
                             </Grid>
                         </Grid>
-                        <Button
-                            type="submit"
+                        <Button type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                        >
-                            Sign Up
-                         </Button>
+                            disabled={loading}>
+                            {loading && <CircularProgress size={25} />}
+                            {!loading && 'SIGN UP'}
+                        </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
 
